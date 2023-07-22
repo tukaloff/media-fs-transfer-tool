@@ -12,11 +12,13 @@ clone this repo and run maven install
 
 Simply run build artifact with java:
 
-`java -jar media-fs-transfer-tool-0.0.1-SNAPSHOT.jar <sourceDir> <destinationDir> <fileExtension> <deviceFolderName>`
+```
+java -jar media-fs-transfer-tool.jar <sourceDir> <destinationDir> <fileExtension> <deviceFolderName>
+```
 
 `sourceDir` - directory on disk from your camera, ex: `/Volumes/SonySD128/DCIM`
 
-`destinationDir` - storage destination you prefer, ex: `Volumes/SanDisk256/Photo`
+`destinationDir` - storage destination you prefer, ex: `/Volumes/SanDisk256/Photo`
 
 `fileExtension` - file extension which used for filtering files from disk, ex: `.ARW`
 
@@ -24,7 +26,7 @@ Simply run build artifact with java:
 
 # How it works?
 
-Tool select files from source dir filtered with extension and for each copies to <destinationDir>/<deviceFolderName>/<ISO_DATE>/
+Tool select files from source dir filtered with extension and for each copies to `<destinationDir>/<deviceFolderName>/<ISO_DATE>/`
 
 For example `/Volumes/SanDisk256/Photo/SonyA7R/2023-06-05/`
 

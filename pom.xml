@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tukaloff</groupId>
 	<artifactId>media-fs-transfer-tool</artifactId>
-    <version>0.0.1-SNAPSHOT</version><!--0.0.1-SNAPSHOT --> 
+    <version>0.0.1-SNAPSHOT</version> 
     <name>media-fs-transfer-tool</name>
 	<description>Tool for transfer media files from SD to whatever</description>
 	<properties>
@@ -46,6 +46,7 @@
     </dependencies>
 
 	<build>
+        <finalName>media-fs-transfer-tool</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -40,25 +40,25 @@ public class FileService {
     public void processFolder(String source, String dest, String extension, String deviceFolder) throws IOException {
         try(Stream<Path> paths = Files.walk(Paths.get(source))) {
             Path destination = Paths.get(dest, deviceFolder);
-            List<Entry<Path,Path>> copyed = paths
+            List<Entry<Path,Path>> copied = paths
                 .filter(path -> path.toString().endsWith(extension))
                 .map(path -> copyFile(path, destination))
                 .collect(Collectors.toList());
-            long notCopyed = copyed.stream().filter(entry -> entry.getValue() == null).count();
-            List<String> updatedFolders = copyed.stream().filter(entry -> entry.getValue() != null)
+            long notCopyed = copied.stream().filter(entry -> entry.getValue() == null).count();
+            List<String> updatedFolders = copied.stream().filter(entry -> entry.getValue() != null)
                 .map(entry -> entry.getValue().getParent().toString())
                 .distinct()
                 .collect(Collectors.toList());
-            copyed.stream().filter(entry -> entry.getValue() != null)
+            copied.stream().filter(entry -> entry.getValue() != null)
                 .filter(entry -> ensureEquals(entry.getKey(), entry.getValue()))
                 .map(entry -> entry.getKey())
                 .forEach(this::safeDelete);
-            copyed.stream().filter(entry -> entry.getValue() != null)
+            copied.stream().filter(entry -> entry.getValue() != null)
                 .map(entry -> entry.getKey().getParent())
                 .distinct()
                 .filter(parent -> isEmpty(parent))
                 .forEach(this::safeDelete);
-            log.info("Not copyed: " + notCopyed);
+            log.info("Not copied: " + notCopyed);
             log.info("New/updated folders:");
             updatedFolders.stream().forEach(folder -> log.info("\t" + folder));
         }

@@ -37,15 +37,15 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     private void checkForHelp(String... args) {
         if (args.length == 1 && "-h".equals(args[0])) {
-            System.out.println("");
+            printHelp();
             System.exit(0);
         }
     }
 
     private void printHelp() {
         System.out.println("Usage:");
-        System.out.println("java -jar media-fs-transfer-tool-0.0.1-SNAPSHOT.jar <sourceDir> <destinationDir> <fileExtension> <deviceFolderName>");
+        System.out.println("java -jar media-fs-transfer-tool.jar <sourceDir> <destinationDir> <fileExtension> <deviceFolderName>");
         System.out.println("Ex.:");
-        System.out.println("java -jar media-fs-transfer-tool-0.0.1-SNAPSHOT.jar /Volumes/SonySD128/DCIM /Volumes/SanDisk256/Photo .ARW SonyA7R");
+        System.out.println("java -jar media-fs-transfer-tool.jar /Volumes/SonySD128/DCIM /Volumes/SanDisk256/Photo .ARW SonyA7R");
     }
 }
