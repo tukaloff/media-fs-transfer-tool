@@ -1,23 +1,23 @@
 package com.tukaloff.mediafstransfertool;
 
-import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-import java.util.Map.Entry;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,6 +30,25 @@ public class FileService {
         try(Stream<Path> paths = Files.walk(Paths.get(source))) {
             return paths.filter(path -> path.toString().endsWith(extension))
                 .count();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return 0;
+    }
+
+    public long filesSizeInSource(String source, String extension) {
+        try(Stream<Path> paths = Files.walk(Paths.get(source))) {
+            return paths.filter(path -> path.toString().endsWith(extension))
+                .mapToLong(path -> {
+                    try {
+                    return Files.size(path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return 0;
+                })
+                .sum();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
