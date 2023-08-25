@@ -1,12 +1,11 @@
 package com.tukaloff.mediafstransfertool;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.util.Scanner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -44,7 +43,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     private String formatSizeInGB(long filesSizeInSource) {
         String format = "%.02f";
-        return String.format(format, filesSizeInSource/1024/1024/1024.0);
+        return String.format(format, filesSizeInSource / 1024 / 1024 / 1024.0);
     }
 
     private void checkForHelp(String... args) {
