@@ -28,7 +28,7 @@ public class FileService {
 
     public long filesCountInSource(String source, String extension) {
         try (Stream<Path> paths = Files.walk(Paths.get(source))) {
-            return paths.filter(filterPath(extension)).count();
+            return filtered(extension, paths).count();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
@@ -43,7 +43,7 @@ public class FileService {
 
     public long filesSizeInSource(String source, String extension) {
         try (Stream<Path> paths = Files.walk(Paths.get(source))) {
-            return paths.filter(filterPath(extension)).mapToLong(path -> {
+            return filtered(extension, paths).mapToLong(path -> {
                 try {
                     return Files.size(path);
                 } catch (IOException e) {
@@ -61,9 +61,15 @@ public class FileService {
     public void processFolder(String source, String dest, String extension, String deviceFolder)
             throws IOException {
         try (Stream<Path> paths = Files.walk(Paths.get(source))) {
+            final Progress progress = new Progress();
+            progress.setFilesCount(filesCountInSource(source, extension));
             Path destination = Paths.get(dest, deviceFolder);
-            List<Entry<Path, Path>> copied = paths.filter(filterPath(extension))
-                    .map(path -> copyFile(path, destination)).collect(Collectors.toList());
+            List<Entry<Path, Path>> copied = filtered(extension, paths)
+                    .map(path -> {
+                        progress.increment();
+                        System.out.print(progress.getString());
+                        return copyFile(path, destination);
+                    }).collect(Collectors.toList());
             long notCopyed = copied.stream().filter(entry -> entry.getValue() == null).count();
             List<String> updatedFolders = copied.stream().filter(entry -> entry.getValue() != null)
                     .map(entry -> entry.getValue().getParent().toString()).distinct()
@@ -78,6 +84,10 @@ public class FileService {
             log.info("New/updated folders:");
             updatedFolders.stream().forEach(folder -> log.info("\t" + folder));
         }
+    }
+
+    private Stream<Path> filtered(String extension, Stream<Path> paths) {
+        return paths.filter(filterPath(extension));
     }
 
     private void safeDelete(Path path) {
@@ -123,7 +133,7 @@ public class FileService {
                     Files.createDirectories(Paths.get(destination.toString(), isoDateString));
             Path destFile = dateFolder.resolve(path.getFileName());
             Files.copy(path, destFile, StandardCopyOption.REPLACE_EXISTING);
-            log.info(path.toFile().getName() + " " + isoDateString);
+            // log.info(path.toFile().getName() + " " + isoDateString);
             return new HashMap.SimpleEntry<>(path, destFile);
         } catch (IOException e) {
             e.printStackTrace();
